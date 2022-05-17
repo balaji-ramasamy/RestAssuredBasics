@@ -11,9 +11,11 @@ public class RestAssuredTest {
         given().
                 baseUri(baseURL).
                 header("x-api-key",apiKey).
+                log().all().
         when().
                 get("/workspaces").
-        then()
+        then().
+                log().all()
                 .assertThat()
                 .statusCode(200);
     }
