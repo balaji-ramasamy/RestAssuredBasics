@@ -1,10 +1,11 @@
 import org.testng.annotations.Test;
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
 
 public class RestAssuredTest {
 
     private static final String baseURL = "https://api.getpostman.com";
-    private static final String apiKey ="PMAK-627c5ad78bbfca15225264ca-b5a81b2feedf37166c56809f39cddbecbe";
+    private static final String apiKey =System.getProperty("postmanKey");
 
     @Test
     public void assertStatusCodeTest(){
@@ -19,6 +20,22 @@ public class RestAssuredTest {
                 .assertThat()
                 .statusCode(200);
     }
+    
+    @Test
+    public void assertResponseBodyTest(){
+        given().
+                baseUri(baseURL).
+                header("x-api-key",apiKey).
+                log().all().
+        when().
+                get("/workspaces").
+        then().
+                log().all()
+                .assertThat()
+                .statusCode(200)
+                .body("workspaces.name", hasItems("My Workspace", "New workspace 1", "New Workspace 2"));
+    }
+    
 
 
 
